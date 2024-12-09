@@ -1,3 +1,11 @@
+#[cfg(test)]
+#[macro_use]
+extern crate quickcheck;
+
+#[cfg(test)]
+#[macro_use]
+extern crate quickcheck_macros;
+
 mod utils;
 mod y2024;
 
