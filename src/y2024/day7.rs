@@ -161,7 +161,7 @@ impl Solution for Sln {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::y2024::day7::EquationParseError;
 
     use super::*;

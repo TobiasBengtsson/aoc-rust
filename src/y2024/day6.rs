@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 use crate::utils::template::Solution;
 use crate::y2024::day6::Direction::{East, North, South, West};
 use std::collections::HashSet;
