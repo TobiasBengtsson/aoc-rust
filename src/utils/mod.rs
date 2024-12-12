@@ -13,15 +13,51 @@ pub struct Point {
     pub y: IntType,
 }
 
+/// Point on a pixel map (x increases downwards, y increases rightwards)
 impl Point {
     pub fn new(x: IntType, y: IntType) -> Point {
-        Point {x, y}
+        Point { x, y }
+    }
+
+    pub fn add_x(&self, x: IntType) -> Point {
+        Point::new(self.x.wrapping_add(x), self.y)
+    }
+
+    pub fn sub_x(&self, x: IntType) -> Point {
+        Point::new(self.x.wrapping_sub(x), self.y)
+    }
+
+    pub fn add_y(&self, y: IntType) -> Point {
+        Point::new(self.x, self.y.wrapping_add(y))
+    }
+
+    pub fn sub_y(&self, y: IntType) -> Point {
+        Point::new(self.x, self.y.wrapping_sub(y))
+    }
+
+    pub fn left(&self) -> Point {
+        self.sub_y(1)
+    }
+
+    pub fn right(&self) -> Point {
+        self.add_y(1)
+    }
+
+    pub fn up(&self) -> Point {
+        self.sub_x(1)
+    }
+
+    pub fn down(&self) -> Point {
+        self.add_x(1)
     }
 }
 
 impl Default for Point {
     fn default() -> Self {
-        Self { x: Default::default(), y: Default::default() }
+        Self {
+            x: Default::default(),
+            y: Default::default(),
+        }
     }
 }
 
@@ -29,7 +65,10 @@ impl Add for Point {
     type Output = Point;
 
     fn add(self, rhs: Self) -> Self::Output {
-        Point { x: self.x.wrapping_add(rhs.x), y: self.y.wrapping_add(rhs.y) }
+        Point {
+            x: self.x.wrapping_add(rhs.x),
+            y: self.y.wrapping_add(rhs.y),
+        }
     }
 }
 
@@ -37,14 +76,20 @@ impl Sub for Point {
     type Output = Point;
 
     fn sub(self, rhs: Self) -> Self::Output {
-        Point { x: self.x.wrapping_sub(rhs.x), y: self.y.wrapping_sub(rhs.y) }
+        Point {
+            x: self.x.wrapping_sub(rhs.x),
+            y: self.y.wrapping_sub(rhs.y),
+        }
     }
 }
 
 #[cfg(test)]
 impl Arbitrary for Point {
     fn arbitrary(g: &mut quickcheck::Gen) -> Self {
-        Point { x: IntType::arbitrary(g), y: IntType::arbitrary(g) }
+        Point {
+            x: IntType::arbitrary(g),
+            y: IntType::arbitrary(g),
+        }
     }
 }
 
