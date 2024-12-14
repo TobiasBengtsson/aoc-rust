@@ -24,32 +24,25 @@ impl Solution for Sln {
             }
         }
 
-        let mut rev_hdd = hdd.clone();
-        rev_hdd.reverse();
-        let mut next_free = 0;
-        let hdd_len = hdd.len();
-        for (i, &b) in rev_hdd.iter().enumerate() {
-            if next_free >= hdd_len.wrapping_sub(i + 1) {
-                break;
-            }
-            if b == -1 {
+        let mut a = 0;
+        let mut z = hdd.len() - 1;
+        while a < z {
+            if hdd[a] != -1 {
+                a += 1;
                 continue;
-            } else {
-                while *hdd.get(next_free).unwrap() != -1 {
-                    next_free += 1;
-                }
-
-                hdd[next_free] = b;
-                hdd[hdd_len.wrapping_sub(i + 1)] = -1;
             }
-        }
 
-        hdd[49555] = 5280;
-        hdd[49556] = -1;
+            if hdd[z] == -1 {
+                z -= 1;
+                continue;
+            }
+
+            hdd[a] = hdd[z];
+            hdd[z] = -1;
+        }
 
         let mut chksum: u64 = 0;
         for (i, &b) in hdd.iter().enumerate() {
-            // println!("{}: {}", i, b);
             if b != -1 {
                 chksum += i as u64 * b as u64;
             }
@@ -59,6 +52,89 @@ impl Solution for Sln {
     }
 
     fn part_2(&self, input: String) -> String {
-        "".to_string()
+        let input = input.lines().next().unwrap();
+        let mut hdd = Vec::<i64>::new();
+        for (i, c) in input.chars().enumerate() {
+            if i % 2 == 0 {
+                for _ in 0..(c.to_digit(10).unwrap()) {
+                    hdd.push(i as i64 / 2);
+                }
+            } else {
+                for _ in 0..(c.to_digit(10).unwrap()) {
+                    hdd.push(-1);
+                }
+            }
+        }
+
+        let mut z = hdd.len() - 1;
+        'outer: while z > 0 {
+            if hdd[z] == -1 {
+                z -= 1;
+                continue;
+            }
+
+            let id = hdd[z];
+            let mut len = 0;
+            while hdd[z] == id {
+                len += 1;
+                if z == 0 {
+                    break 'outer;
+                }
+                z -= 1;
+            }
+
+            let mut a = 0;
+            while a < z {
+                if hdd[a] != -1 {
+                    a += 1;
+                    continue;
+                }
+
+                let mut free_len = 0;
+                let start_a = a;
+                while hdd[a] == -1 {
+                    a += 1;
+                    free_len += 1;
+                }
+
+                if free_len >= len {
+                    for i in (z + 1)..(z + len + 1) {
+                        hdd[i] = -1;
+                    }
+
+                    for i in start_a..(start_a + len) {
+                        hdd[i] = id;
+                    }
+
+                    continue 'outer;
+                }
+            }
+        }
+
+        let mut chksum: u64 = 0;
+        for (i, &b) in hdd.iter().enumerate() {
+            if b != -1 {
+                chksum += i as u64 * b as u64;
+            }
+        }
+
+        chksum.to_string()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_part_1() {
+        let input = r"2333133121414131402";
+        assert_eq!("1928", Sln::new().part_1(input.to_string()))
+    }
+
+    #[test]
+    fn test_part_2() {
+        let input = r"2333133121414131402";
+        assert_eq!("2858", Sln::new().part_2(input.to_string()))
     }
 }
