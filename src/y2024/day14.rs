@@ -20,7 +20,13 @@ struct State {
 
 impl State {
     fn update(&self) -> State {
-        State { position: Point::new((self.position.x as isize + self.velocity.0).rem_euclid(101) as usize, (self.position.y as isize + self.velocity.1).rem_euclid(103) as usize), velocity : self.velocity }
+        State {
+            position: Point::new(
+                (self.position.x as isize + self.velocity.0).rem_euclid(101) as usize,
+                (self.position.y as isize + self.velocity.1).rem_euclid(103) as usize,
+            ),
+            velocity: self.velocity,
+        }
     }
 }
 
@@ -55,13 +61,25 @@ impl Solution for Sln {
             }
 
             let q = match p.x {
-                x if x < 50 => if p.y < 51 { 1 } else { 3 },
-                x if x > 50 => if p.y < 51 { 2 } else { 4 },
+                x if x < 50 => {
+                    if p.y < 51 {
+                        1
+                    } else {
+                        3
+                    }
+                }
+                x if x > 50 => {
+                    if p.y < 51 {
+                        2
+                    } else {
+                        4
+                    }
+                }
                 _ => 0,
             };
 
             qs.entry(q).and_modify(|c| *c += 1).or_insert(1);
-        };
+        }
 
         (qs[&1] * qs[&2] * qs[&3] * qs[&4]).to_string()
     }
@@ -106,7 +124,7 @@ impl Solution for Sln {
             let var_x = mean_x2 - mean_x.powf(2.0);
             let var_y = mean_y2 - mean_y.powf(2.0);
             if var_x < 600.0 && var_y < 600.0 {
-                return (i + 1).to_string()
+                return (i + 1).to_string();
             }
         }
 
