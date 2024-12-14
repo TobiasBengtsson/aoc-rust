@@ -1,4 +1,7 @@
-use std::{collections::{HashMap, HashSet}, sync::{Arc, Mutex}};
+use std::{
+    collections::{HashMap, HashSet},
+    sync::{Arc, Mutex},
+};
 
 use crate::utils::{template::Solution, Point};
 
@@ -36,14 +39,21 @@ struct AntennaCluster {
 
 impl AntennaCluster {
     fn new() -> AntennaCluster {
-        AntennaCluster { locations: HashSet::new() }
+        AntennaCluster {
+            locations: HashSet::new(),
+        }
     }
 
     fn insert(&mut self, p: Point) {
         self.locations.insert(p);
     }
 
-    fn get_antinodes(&self, resonant_harmonics: bool, x_max: usize, y_max: usize) -> HashSet<Point> {
+    fn get_antinodes(
+        &self,
+        resonant_harmonics: bool,
+        x_max: usize,
+        y_max: usize,
+    ) -> HashSet<Point> {
         let mut antinodes = HashSet::new();
         for (i, &p1) in self.locations.iter().enumerate() {
             for &p2 in self.locations.iter().skip(i + 1) {
@@ -91,7 +101,8 @@ impl Solution for Sln {
             }
         });
 
-        let x = antinodes.lock().unwrap().len().to_string(); x
+        let x = antinodes.lock().unwrap().len().to_string();
+        x
     }
 
     fn part_2(&self, input: String) -> String {
@@ -108,7 +119,8 @@ impl Solution for Sln {
             }
         });
 
-        let x = antinodes.lock().unwrap().len().to_string(); x
+        let x = antinodes.lock().unwrap().len().to_string();
+        x
     }
 }
 
