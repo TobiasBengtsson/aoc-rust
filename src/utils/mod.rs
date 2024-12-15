@@ -36,19 +36,19 @@ impl Point {
     }
 
     pub fn left(&self) -> Point {
-        self.sub_y(1)
-    }
-
-    pub fn right(&self) -> Point {
-        self.add_y(1)
-    }
-
-    pub fn up(&self) -> Point {
         self.sub_x(1)
     }
 
-    pub fn down(&self) -> Point {
+    pub fn right(&self) -> Point {
         self.add_x(1)
+    }
+
+    pub fn up(&self) -> Point {
+        self.sub_y(1)
+    }
+
+    pub fn down(&self) -> Point {
+        self.add_y(1)
     }
 }
 
